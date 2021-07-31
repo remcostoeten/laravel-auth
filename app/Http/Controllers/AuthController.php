@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Response;
 use  Illuminate\Support\Facades\Auth;
 
@@ -34,12 +35,21 @@ class AuthController extends Controller
         $cookie = cookie('jwt', $token, 60 * 24); // 1 day
 
         return response([
-            'message' => 'success'
+            'message' => $token
         ])->withCookie($cookie);
     }
 
     public function user()
     {
-        return 'Authenticated user';
+        return Auth::user();
+    }
+
+    public function logout(Request $request)
+    {
+        $cookie = Cookie::forget('jwt');
+
+        return response([
+            'message' => 'Success'
+        ])->withCookie($cookie);
     }
 }
