@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Response;
 use  Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreUserRequest;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(StoreUserRequest $request)
     {
         return User::create([
             'name' => $request->input('name'),
@@ -35,21 +35,12 @@ class AuthController extends Controller
         $cookie = cookie('jwt', $token, 60 * 24); // 1 day
 
         return response([
-            'message' => $token
+            'message' => 'success'
         ])->withCookie($cookie);
     }
 
     public function user()
     {
-        return Auth::user();
-    }
-
-    public function logout(Request $request)
-    {
-        $cookie = Cookie::forget('jwt');
-
-        return response([
-            'message' => 'Success'
-        ])->withCookie($cookie);
+        return 'Authenticated user';
     }
 }
